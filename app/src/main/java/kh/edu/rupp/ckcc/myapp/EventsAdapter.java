@@ -10,28 +10,39 @@ import android.widget.TextView;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
 
+    private Event[] data;
+
+    public void setData(Event[] data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-        View view = layoutInflater.inflate(R.layout.view_holder_event, viewGroup, false);
-        EventViewHolder eventViewHolder = new EventViewHolder(view);
-        return eventViewHolder;
+        View viewHolderLayout = layoutInflater.inflate(R.layout.view_holder_event, viewGroup, false);
+        EventViewHolder viewHolder = new EventViewHolder(viewHolderLayout);
+        return viewHolder;
 
     }
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder eventViewHolder, int i) {
 
+        Event event = data[i];
+        eventViewHolder.txtTitle.setText(event.getTitle());
+        eventViewHolder.txtDate.setText(event.getDate());
+
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return (data == null) ? 0 : data.length;
     }
 
-    class EventViewHolder extends RecyclerView.ViewHolder{
+    class EventViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imgEvent;
         private TextView txtTitle;
