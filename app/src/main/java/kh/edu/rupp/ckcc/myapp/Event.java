@@ -2,16 +2,26 @@ package kh.edu.rupp.ckcc.myapp;
 
 public class Event {
 
-    private String imageUrl;
+    private int id;
     private String title;
+    private String imageUrl;
     private String date;
+    private String location;
 
-    public String getImageUrl() {
-        return imageUrl;
+    public Event(int id, String title, String imageUrl, String date, String location) {
+        this.id = id;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.date = date;
+        this.location = location;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -22,6 +32,14 @@ public class Event {
         this.title = title;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getDate() {
         return date;
     }
@@ -29,4 +47,13 @@ public class Event {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
 }

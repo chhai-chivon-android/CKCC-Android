@@ -27,25 +27,12 @@ public class EventsActivity extends AppCompatActivity {
         // Adapter
         eventsAdapter = new EventsAdapter();
 
-        // Create temporary data
-        Event event1 = new Event();
-        event1.setTitle("Event 1");
-        event1.setDate("11 Decmber 2018");
+        // Load list of events from DB
+        DbManager dbManager = new DbManager(this);
+        dbManager.insertTemporaryData();
+        Event[] events = dbManager.getAllEvents();
 
-        Event event2 = new Event();
-        event2.setTitle("Event 2");
-        event2.setDate("24 September 2018");
-
-        Event event3 = new Event();
-        event3.setTitle("Event 3");
-        event3.setDate("27 August 2018");
-
-        Event[] data = new Event[3];
-        data[0] = event1;
-        data[1] = event2;
-        data[2] = event3;
-
-        eventsAdapter.setData(data);
+        eventsAdapter.setData(events);
 
         recyclerView.setAdapter(eventsAdapter);
 
