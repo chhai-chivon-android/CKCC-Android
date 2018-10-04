@@ -7,13 +7,15 @@ public class Event {
     private String imageUrl;
     private String date;
     private String location;
+    private String description;
 
-    public Event(int id, String title, String imageUrl, String date, String location) {
+    public Event(int id, String title, String imageUrl, String date, String location, String description) {
         this.id = id;
         this.title = title;
         this.imageUrl = imageUrl;
         this.date = date;
         this.location = location;
+        this.description = description;
     }
 
     public int getId() {
@@ -56,4 +58,11 @@ public class Event {
         this.location = location;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

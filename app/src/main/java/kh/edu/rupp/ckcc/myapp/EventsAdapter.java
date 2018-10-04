@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewHolder> {
 
@@ -42,7 +43,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
         return (data == null) ? 0 : data.length;
     }
 
-    class EventViewHolder extends RecyclerView.ViewHolder {
+    class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView imgEvent;
         private TextView txtTitle;
@@ -54,6 +55,13 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventViewH
             imgEvent = itemView.findViewById(R.id.img_event);
             txtTitle = itemView.findViewById(R.id.txt_title);
             txtDate = itemView.findViewById(R.id.txt_date);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int index = getAdapterPosition();
         }
     }
 

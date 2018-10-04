@@ -46,7 +46,7 @@ public class DbManager extends SQLiteOpenHelper {
             String date = cursor.getString(3);
             String location = cursor.getString(4);
 
-            Event event = new Event(id, title, imageUrl, date, location);
+            Event event = new Event(id, title, imageUrl, date, location, "");
             events[index] = event;
             index++;
         }
