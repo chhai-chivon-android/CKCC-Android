@@ -34,10 +34,14 @@ public class EventsActivity extends AppCompatActivity {
         // Adapter
         eventsAdapter = new InnerClassEventsAdapter();
 
-        // Load list of events from DB
-        DbManager dbManager = new DbManager(this);
+        // Load list of events from DB using build-in API
+        /*DbManager dbManager = new DbManager(this);
         dbManager.insertTemporaryData();
-        Event[] events = dbManager.getAllEvents();
+        Event[] events = dbManager.getAllEvents();*/
+
+        // Load list of events from DB using library
+        DbManagerLib dbManagerLib = new DbManagerLib(this);
+        Event[] events = dbManagerLib.getAllEvents();
 
         eventsAdapter.setData(events);
 
