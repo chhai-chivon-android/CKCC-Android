@@ -1,5 +1,7 @@
 package kh.edu.rupp.ckcc.myapp;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Event {
 
     private int id;
@@ -7,7 +9,8 @@ public class Event {
     private String imageUrl;
     private String date;
     private String location;
-    private String description;
+    @SerializedName("description")
+    private String desc;
 
     public Event(int id, String title, String imageUrl, String date, String location, String description) {
         this.id = id;
@@ -15,7 +18,7 @@ public class Event {
         this.imageUrl = imageUrl;
         this.date = date;
         this.location = location;
-        this.description = description;
+        this.desc = description;
     }
 
     public int getId() {
@@ -58,11 +61,11 @@ public class Event {
         this.location = location;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

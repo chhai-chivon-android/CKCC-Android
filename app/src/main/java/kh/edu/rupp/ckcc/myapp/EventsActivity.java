@@ -10,14 +10,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
 
 public class EventsActivity extends AppCompatActivity {
 
     private InnerClassEventsAdapter eventsAdapter;
+    private RecyclerView recyclerView;
+    private FrameLayout progressContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,7 +35,8 @@ public class EventsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_event);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
+        progressContainer = findViewById(R.id.progress_bar_container);
 
         // LayoutManager
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -40,13 +51,38 @@ public class EventsActivity extends AppCompatActivity {
         Event[] events = dbManager.getAllEvents();*/
 
         // Load list of events from DB using library
-        DbManagerLib dbManagerLib = new DbManagerLib(this);
+        /*DbManagerLib dbManagerLib = new DbManagerLib(this);
         Event[] events = dbManagerLib.getAllEvents();
-
-        eventsAdapter.setData(events);
+        eventsAdapter.setData(events);*/
 
         recyclerView.setAdapter(eventsAdapter);
 
+        // Load list events from Web Service
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://test.js-cambodia.com/ckcc/events.php";
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                // Convert response to Event[] using Gson library
+                Gson gson = new Gson();
+                Event[] events = gson.fromJson(response, Event[].class);
+                eventsAdapter.setData(events);
+                hideLoading();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideLoading();
+                Toast.makeText(EventsActivity.this, "Load data error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(request);
+
+    }
+
+    private void hideLoading(){
+        progressContainer.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     // Adapter
@@ -76,6 +112,7 @@ public class EventsActivity extends AppCompatActivity {
             Event event = data[i];
             eventViewHolder.txtTitle.setText(event.getTitle());
             eventViewHolder.txtDate.setText(event.getDate());
+            eventViewHolder.imgEvent.setImageURI(event.getImageUrl());
 
         }
 
@@ -86,7 +123,7 @@ public class EventsActivity extends AppCompatActivity {
 
         class InnerClassEventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            private ImageView imgEvent;
+            private SimpleDraweeView imgEvent;
             private TextView txtTitle;
             private TextView txtDate;
 
@@ -107,10 +144,9 @@ public class EventsActivity extends AppCompatActivity {
                 // Pass data
                 int index = getAdapterPosition();
                 Event event = data[index];
-                intent.putExtra("title", event.getTitle());
-                intent.putExtra("date", event.getDate());
-                intent.putExtra("location", event.getLocation());
-                intent.putExtra("description", event.getDescription());
+                Gson gson = new Gson();
+                String eventJson = gson.toJson(event);
+                intent.putExtra("eventJson", eventJson);
 
                 startActivity(intent);
             }
