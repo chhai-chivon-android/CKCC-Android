@@ -7,7 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -35,6 +38,9 @@ public class EventsActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_event);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         recyclerView = findViewById(R.id.recycler_view);
         progressContainer = findViewById(R.id.progress_bar_container);
 
@@ -57,6 +63,11 @@ public class EventsActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(eventsAdapter);
 
+        loadEvents();
+
+    }
+
+    private void loadEvents(){
         // Load list events from Web Service
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://test.js-cambodia.com/ckcc/events.php";
@@ -77,7 +88,41 @@ public class EventsActivity extends AppCompatActivity {
             }
         });
         queue.add(request);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_events, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.mnu_add){
+            showAddActivity();
+        }
+
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                Toast.makeText(this, "Something changed", Toast.LENGTH_LONG).show();
+                loadEvents();
+            } else {
+                Toast.makeText(this, "Nothing changed", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void showAddActivity(){
+        Intent intent = new Intent(this, AddEventActivity.class);
+        startActivityForResult(intent, 1);
     }
 
     private void hideLoading(){
